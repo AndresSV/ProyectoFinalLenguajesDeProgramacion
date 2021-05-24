@@ -46,6 +46,8 @@ public class Producer extends Thread {
             int valor2 = Character.getNumericValue(product.charAt(5));
             Object[]rowData={operador,valor1,valor2,this.buffer.count};
             this.buffer.produce(product);
+                System.out.println("dormir");
+                System.out.println(this.wait_MS);
                 Thread.sleep(this.wait_MS);
             } catch (InterruptedException ex) {
                 Logger.getLogger(Producer.class.getName()).log(Level.SEVERE, null, ex);

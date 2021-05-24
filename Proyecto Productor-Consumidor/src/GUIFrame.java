@@ -25,7 +25,8 @@ public class GUIFrame extends javax.swing.JFrame {
         cantConsumer,
         valMin, 
         valMax,
-        wait_MS;
+        wait_pro,
+        wait_con;
     
 
     /**
@@ -347,7 +348,17 @@ public class GUIFrame extends javax.swing.JFrame {
                 cantConsumer = (int) nConsumidores.getValue();
                 valMin = (int) spinnerMinRange.getValue();
                 valMax = (int) spinnerMaxRange.getValue();
-
+                    try {
+                        wait_pro = Integer.parseInt(jTextField1.getText());
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(this, "Error, formato no valido", "ERROR DE NUMERO", JOptionPane.ERROR_MESSAGE);
+                    }
+                    try {
+                        wait_con = Integer.parseInt(jTextField2.getText());
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(this, "Error, formato no valido", "ERROR DE NUMERO", JOptionPane.ERROR_MESSAGE);
+                    }
+                
                 String suma= checkbox1.getState()? "+":"";
                   String resta= checkbox2.getState()? "-":"";
                   String mult= checkbox3.getState()? "*":"";
@@ -360,11 +371,12 @@ public class GUIFrame extends javax.swing.JFrame {
                   }
                   jButton1.setText("Stop");
                   isRunning = true;
-
-                Producer producer = new Producer(buffer, cantProducer, valMin, valMax,wait_MS,operadores);
+                
+                //Producer(Buffer buffer, int cantidad, int valMin, int valMax, int wait_MS, String operadores) {
+                Producer producer = new Producer(buffer, cantProducer, valMin, valMax,wait_pro,operadores);
                 producer.start();
 
-                Consumer consumer = new Consumer(buffer, cantConsumer,(DefaultTableModel) jTable2.getModel());
+                Consumer consumer = new Consumer(buffer, wait_con,(DefaultTableModel) jTable2.getModel());
                 consumer.start();
 
                 validarValores(valMin, valMax);
@@ -382,9 +394,8 @@ public class GUIFrame extends javax.swing.JFrame {
             }
             for(Consumer c : consumers){
                 if(c!=null){
-                    
                     System.out.println("Here2");
-                    //c.terminate();
+                    c.terminate();
                 }
             }
         }
