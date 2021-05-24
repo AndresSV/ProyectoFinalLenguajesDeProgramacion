@@ -9,9 +9,8 @@ public class Producer extends Thread {
     int cantidad, valMin, valMax;
     String[] operadores;
     private volatile boolean isRunning = true;
-    DefaultTableModel produced;
     
-    Producer(Buffer buffer, int cantidad, int valMin, int valMax, int wait_MS, String operadores, DefaultTableModel produced) {
+    Producer(Buffer buffer, int cantidad, int valMin, int valMax, int wait_MS, String operadores) {
         this.buffer = buffer;
         this.cantidad = cantidad;
         this.valMin = valMin;
@@ -22,15 +21,8 @@ public class Producer extends Thread {
         if(wait_MS > 10000){
             wait_MS=10000;
         }
-        if(wait_MS < 0){
-            wait_MS=0;
-        }
-        if(wait_MS > 10000){
-            wait_MS=10000;
-        }
         this.wait_MS = wait_MS;
         this.operadores = operadores.split("");
-        this.produced=produced;
     }
     
     private String scheme_operation(){
@@ -47,28 +39,23 @@ public class Producer extends Thread {
         Random r = new Random(System.currentTimeMillis());
         
         while(isRunning) {
-            String product = scheme_operation();
+            try {
+                String product = scheme_operation();
             char operador = product.charAt(1);
             int valor1 = Character.getNumericValue(product.charAt(3));
             int valor2 = Character.getNumericValue(product.charAt(5));
             Object[]rowData={operador,valor1,valor2,this.buffer.count};
-            this.produced.addRow(rowData);
             this.buffer.produce(product);
-        }   
-        try {
-            Thread.sleep(this.wait_MS);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(Producer.class.getName()).log(Level.SEVERE, null, ex);
-            log("Stopped Thread");
+                Thread.sleep(this.wait_MS);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Producer.class.getName()).log(Level.SEVERE, null, ex);
+                System.out.println("Stopped Thread");
+            }
         }
     }
     
     public void terminate(){
-        log("Stopping producer...");
+        System.out.println("Stopping producer...");
         isRunning = false;
-    }
-    
-    private void log (Object obj){
-        System.out.println(obj);
     }
 }

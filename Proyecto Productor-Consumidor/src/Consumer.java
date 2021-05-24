@@ -32,7 +32,8 @@ public class Consumer extends Thread {
         log("Running Consumer...");
         String product;
         while(Running) {
-            product = this.buffer.consume();
+            try {
+                product = this.buffer.consume();
             int resultado_scheme = schemesolver(product);
             Buffer.print("Consumer "+ this.getId()  + " consumed: " + product+" result scheme: "+resultado_scheme);
             char operador = product.charAt(1);
@@ -43,7 +44,6 @@ public class Consumer extends Thread {
                 rowData[3]="INDT";
             }
             this.consumed.addRow(rowData);
-            try {
                 Thread.sleep(this.waitMillis);
             } catch (InterruptedException ex) {
                 log("Stopped");
