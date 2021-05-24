@@ -46,4 +46,7 @@ public class Buffer {
         System.out.println(string);
     }
     
+    public String getBuffer(){
+        return this.buffer;
+    }
 }

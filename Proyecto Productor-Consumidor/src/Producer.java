@@ -11,14 +11,14 @@ public class Producer extends Thread {
     private volatile boolean isRunning = true;
     DefaultTableModel produced;
     
-    Producer(Buffer buffer, int cantidad, int valMin, int valMax, int wait_MS, String operadores) {
+    Producer(Buffer buffer, int cantidad, int valMin, int valMax, int wait_MS, String operadores, DefaultTableModel produced) {
         this.buffer = buffer;
         this.cantidad = cantidad;
         this.valMin = valMin;
         this.valMax =  valMax;
         this.wait_MS = wait_MS;
         this.operadores = operadores.split("");
-        
+        this.produced=produced;
     }
     
     private String scheme_operation(){
@@ -36,6 +36,11 @@ public class Producer extends Thread {
         
         while(isRunning) {
             String product = scheme_operation();
+            char operador = product.charAt(1);
+            int valor1 = Character.getNumericValue(product.charAt(3));
+            int valor2 = Character.getNumericValue(product.charAt(5));
+            Object[]rowData={operador,valor1,valor2,this.buffer.getBuffer()};
+            this.produced.addRow(rowData);
             this.buffer.produce(product);
         }   
         try {
