@@ -350,7 +350,8 @@ public class GUIFrame extends javax.swing.JFrame {
                   String resta= checkbox2.getState()? "-":"";
                   String mult= checkbox3.getState()? "*":"";
                   String div = checkbox4.getState()? "/": "";
-                  String operadores = suma+resta+mult+div;
+                  String pow = checkbox5.getState()? "^": "";
+                  String operadores = suma+resta+mult+div+pow;  
                   if(operadores.length()<1){
                       JOptionPane.showMessageDialog(this, "Error, elige al menos una operación", "ERROR DE OPERACIONES", JOptionPane.ERROR_MESSAGE);
                       return;
