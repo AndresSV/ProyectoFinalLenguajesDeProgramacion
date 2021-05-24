@@ -338,15 +338,8 @@ public class GUIFrame extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         if (!isRunning) {
-            DefaultTableModel model1 = (DefaultTableModel) jTable1.getModel();
-            DefaultTableModel model2 = (DefaultTableModel) jTable2.getModel();
-            model1.setRowCount(0);
-            model2.setRowCount(0);
-            int espera_consumer;
-            int espera_producer;
-            int buffer_t = Integer.parseInt(jTextField3.getText());
                 try{
-                Buffer buffer = new Buffer(buffer_t,(DefaultTableModel) jTable1.getModel(),jProgressBar1,this.jSpinner4);
+                Buffer buffer = new Buffer(Integer.parseInt(jTextField3.getText()));
 
                 cantProducer = (int) nProductores.getValue();
                 cantConsumer = (int) nConsumidores.getValue();
@@ -354,11 +347,11 @@ public class GUIFrame extends javax.swing.JFrame {
                 valMax = (int) spinnerMaxRange.getValue();
 
                 String suma= checkbox1.getState()? "+":"";
-                String resta= checkbox2.getState()? "-":"";
-                String mult= checkbox3.getState()? "*":"";
-                String div = checkbox4.getState()? "/": "";
-                String pow = checkbox5.getState()? "^": "";
-                String operadores = suma+resta+mult+div+pow;
+                  String resta= checkbox2.getState()? "-":"";
+                  String mult= checkbox3.getState()? "*":"";
+                  String div = checkbox4.getState()? "/": "";
+                  String pow = checkbox5.getState()? "^": "";
+                  String operadores = suma+resta+mult+div+pow;  
                   if(operadores.length()<1){
                       JOptionPane.showMessageDialog(this, "Error, elige al menos una operación", "ERROR DE OPERACIONES", JOptionPane.ERROR_MESSAGE);
                       return;
@@ -366,7 +359,7 @@ public class GUIFrame extends javax.swing.JFrame {
                   jButton1.setText("Stop");
                   isRunning = true;
 
-                Producer producer = new Producer(buffer, cantProducer, valMin, valMax,wait_MS,operadores);
+                Producer producer = new Producer(buffer, cantProducer, valMin, valMax,wait_MS,operadores,(DefaultTableModel) jTable1.getModel());
                 producer.start();
 
                 Consumer consumer = new Consumer(buffer, cantConsumer,(DefaultTableModel) jTable2.getModel());
