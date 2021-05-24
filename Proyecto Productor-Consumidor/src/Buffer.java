@@ -4,16 +4,16 @@ import java.util.logging.Logger;
 
 public class Buffer {
     
-    private char buffer;
+    private String buffer;
     
     Buffer() {
-        this.buffer = 0;
+        this.buffer = "";
     }
     
-    synchronized char consume() {
-        char product = 0;
+    synchronized String consume() {
+        String product = "";
         
-        if(this.buffer == 0) {
+        if(this.buffer.equals("")) {
             try {
                 wait(1000);
             } catch (InterruptedException ex) {
@@ -21,14 +21,14 @@ public class Buffer {
             }
         }
         product = this.buffer;
-        this.buffer = 0;
+        this.buffer = "";
         notify();
         
         return product;
     }
     
-    synchronized void produce(char product) {
-        if(this.buffer != 0) {
+    synchronized void produce(String product) {
+        if(!this.buffer.equals("")) {
             try {
                 wait(1000);
             } catch (InterruptedException ex) {

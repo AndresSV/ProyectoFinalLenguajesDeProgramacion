@@ -6,13 +6,27 @@ import java.util.logging.Logger;
 
 public class Producer extends Thread {
     Buffer buffer;
+    private int wait_MS;
     int cantidad, valMin, valMax;
+    String[] operadores;
+    private volatile boolean isRunning = true;
     
-    Producer(Buffer buffer, int cantidad, int valMin, int valMax) {
+    Producer(Buffer buffer, int cantidad, int valMin, int valMax, int wait_MS, String operadores) {
         this.buffer = buffer;
         this.cantidad = cantidad;
         this.valMin = valMin;
         this.valMax =  valMax;
+        this.wait_MS = wait_MS;
+        this.operadores = operadores.split("");
+        
+    }
+    
+    private String scheme_operation(){
+        Random r = new Random(System.currentTimeMillis());
+        char operator = operadores[((int) (Math.random()*(this.operadores.length)))].charAt(0);
+        int Value1 = (int)(Math.random() *(this.valMax - this.valMin))+ this.valMin;
+        int Value2 = (int)(Math.random() *(this.valMax - this.valMin))+ this.valMin;
+        return "("+operator+" "+ Value1 +" " +Value2+ ")";
     }
     
     @Override
@@ -20,26 +34,33 @@ public class Producer extends Thread {
         System.out.println("Running Producer...");
         String products = "+-*/";
         Random r = new Random(System.currentTimeMillis());
-        char product;
+        
+        while(isRunning) {
+            String product = scheme_operation();
+            this.buffer.produce(product);
+        }
         
         for(int i=valMin; i<=valMax; i++){
             products += i;
         }
         
         System.out.println(products);
-        
-        for(int i=0 ; i<cantidad ; i++) {
-            product = products.charAt(r.nextInt(products.length()));
-            this.buffer.produce(product);
-            //System.out.println("Producer produced: " + product);
-            Buffer.print("Producer produced: " + product);
             
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException ex) {
+         try {
+                Thread.sleep(this.wait_MS);
+         } catch (InterruptedException ex) {
                 Logger.getLogger(Producer.class.getName()).log(Level.SEVERE, null, ex);
+                log("Stopped Thread");
             }
         }
+    
+    public void terminate(){
+            log("Stopping producer...");
+            isRunning = false;
+        }
+    
+        private void log (Object obj){
+        System.out.println(obj);
     }
     
 }

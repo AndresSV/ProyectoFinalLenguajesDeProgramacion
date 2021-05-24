@@ -1,4 +1,5 @@
 
+import javax.swing.JOptionPane;
 import javax.swing.SpinnerNumberModel;
 
 /*
@@ -13,10 +14,16 @@ import javax.swing.SpinnerNumberModel;
  */
 public class GUIFrame extends javax.swing.JFrame {
     
+    private boolean isRunning = false;
+    private Producer[] producers;
+    private Consumer[] consumers;
+    
     int cantProducer, 
         cantConsumer,
         valMin, 
-        valMax;
+        valMax,
+        wait_MS;
+    
 
     /**
      * Creates new form GUIFrame
@@ -82,6 +89,12 @@ public class GUIFrame extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         spinnerMinRange = new javax.swing.JSpinner();
+        jLabel9 = new javax.swing.JLabel();
+        checkbox1 = new java.awt.Checkbox();
+        checkbox2 = new java.awt.Checkbox();
+        checkbox3 = new java.awt.Checkbox();
+        checkbox4 = new java.awt.Checkbox();
+        checkbox5 = new java.awt.Checkbox();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -104,11 +117,26 @@ public class GUIFrame extends javax.swing.JFrame {
 
         jLabel2.setText("Consumidores");
 
+        nProductores.setModel(new javax.swing.SpinnerNumberModel(1, 1, 10, 1));
+
+        nConsumidores.setModel(new javax.swing.SpinnerNumberModel(1, 1, 10, 1));
         nConsumidores.setRequestFocusEnabled(false);
 
         jLabel3.setText("Tamaño del Buffer");
 
         jLabel4.setText("Cantidad");
+
+        jLabel9.setText("Operadores");
+
+        checkbox1.setLabel("+");
+
+        checkbox2.setLabel("-");
+
+        checkbox3.setLabel("*");
+
+        checkbox4.setLabel("/");
+
+        checkbox5.setLabel("^");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -120,9 +148,20 @@ public class GUIFrame extends javax.swing.JFrame {
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel9))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(checkbox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(checkbox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(checkbox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(checkbox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(checkbox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(spinnerMinRange, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -138,7 +177,7 @@ public class GUIFrame extends javax.swing.JFrame {
                             .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jTextField1)
                             .addComponent(jTextField2))))
-                .addContainerGap(52, Short.MAX_VALUE))
+                .addContainerGap(34, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -168,7 +207,15 @@ public class GUIFrame extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(spinnerMaxRange, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(spinnerMinRange, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(42, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel9)
+                    .addComponent(checkbox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(checkbox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(checkbox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(checkbox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(checkbox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -289,24 +336,55 @@ public class GUIFrame extends javax.swing.JFrame {
     //Botón Inicio
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        try{
-            Buffer buffer = new Buffer();
+        if (!isRunning) {
+                try{
+                Buffer buffer = new Buffer();
 
-            cantProducer = (int) nProductores.getValue();
-            cantConsumer = (int) nConsumidores.getValue();
-            valMin = (int) spinnerMinRange.getValue();
-            valMax = (int) spinnerMaxRange.getValue();
+                cantProducer = (int) nProductores.getValue();
+                cantConsumer = (int) nConsumidores.getValue();
+                valMin = (int) spinnerMinRange.getValue();
+                valMax = (int) spinnerMaxRange.getValue();
 
-            Producer producer = new Producer(buffer, cantProducer, valMin, valMax);
-            producer.start();
+                String suma= checkbox1.getState()? "+":"";
+                  String resta= checkbox2.getState()? "-":"";
+                  String mult= checkbox3.getState()? "*":"";
+                  String div = checkbox4.getState()? "/": "";
+                  String operadores = suma+resta+mult+div;
+                  if(operadores.length()<1){
+                      JOptionPane.showMessageDialog(this, "Error, elige al menos una operación", "ERROR DE OPERACIONES", JOptionPane.ERROR_MESSAGE);
+                      return;
+                  }
+                  jButton1.setText("Stop");
+                  isRunning = true;
 
-            Consumer consumer = new Consumer(buffer, cantConsumer);
-            consumer.start();
+                Producer producer = new Producer(buffer, cantProducer, valMin, valMax,wait_MS,operadores);
+                producer.start();
 
-            validarValores(valMin, valMax);
-        }catch(BiggerThanMaxException e){
-            System.out.println("El valor mínimo (" + e.getValue()+ ") es mayor o igual que el valor máximo");
+                Consumer consumer = new Consumer(buffer, cantConsumer);
+                consumer.start();
+
+                validarValores(valMin, valMax);
+            }catch(BiggerThanMaxException e){
+                System.out.println("El valor mínimo (" + e.getValue()+ ") es mayor o igual que el valor máximo");
+            }
+        } else {
+            isRunning = false;
+            jButton1.setText("Start");
+            for(Producer p : producers){
+                if(p!=null){
+                    System.out.println("Here");
+                   p.terminate();
+                }
+            }
+            for(Consumer c : consumers){
+                if(c!=null){
+                    
+                    System.out.println("Here2");
+                    //c.terminate();
+                }
+            }
         }
+        
     }//GEN-LAST:event_jButton1ActionPerformed
     /**
      * @param args the command line arguments
@@ -344,6 +422,11 @@ public class GUIFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private java.awt.Checkbox checkbox1;
+    private java.awt.Checkbox checkbox2;
+    private java.awt.Checkbox checkbox3;
+    private java.awt.Checkbox checkbox4;
+    private java.awt.Checkbox checkbox5;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -353,6 +436,7 @@ public class GUIFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

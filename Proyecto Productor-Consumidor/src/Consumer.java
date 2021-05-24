@@ -14,7 +14,7 @@ public class Consumer extends Thread {
     @Override
     public void run() {
         System.out.println("Running Consumer...");
-        char product;
+        String product;
         
         for(int i=0 ; i<cantidad ; i++) {
             product = this.buffer.consume();
