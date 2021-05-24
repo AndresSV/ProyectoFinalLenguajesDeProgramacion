@@ -1,5 +1,7 @@
 
 import javax.swing.JOptionPane;
+import javax.swing.JProgressBar;
+import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.table.DefaultTableModel;
 
@@ -339,7 +341,7 @@ public class GUIFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         if (!isRunning) {
                 try{
-                Buffer buffer = new Buffer(Integer.parseInt(jTextField3.getText()));
+                Buffer buffer = new Buffer(Integer.parseInt(jTextField3.getText()),(DefaultTableModel) jTable1.getModel(), jProgressBar1, jSpinner4 );
 
                 cantProducer = (int) nProductores.getValue();
                 cantConsumer = (int) nConsumidores.getValue();
@@ -359,7 +361,7 @@ public class GUIFrame extends javax.swing.JFrame {
                   jButton1.setText("Stop");
                   isRunning = true;
 
-                Producer producer = new Producer(buffer, cantProducer, valMin, valMax,wait_MS,operadores,(DefaultTableModel) jTable1.getModel());
+                Producer producer = new Producer(buffer, cantProducer, valMin, valMax,wait_MS,operadores);
                 producer.start();
 
                 Consumer consumer = new Consumer(buffer, cantConsumer,(DefaultTableModel) jTable2.getModel());
