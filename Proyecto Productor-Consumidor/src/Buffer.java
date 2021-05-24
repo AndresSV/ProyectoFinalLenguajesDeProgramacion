@@ -5,9 +5,19 @@ import java.util.logging.Logger;
 public class Buffer {
     
     private String buffer;
+    private static int mSize;
     
     Buffer() {
         this.buffer = "";
+        this.mSize=100;
+    }
+    Buffer(int maxSize) {
+        this.buffer = "";
+        if(maxSize<1)
+            maxSize=1;
+        if(maxSize>100)
+            maxSize=100;
+        this.mSize=maxSize;
     }
     
     synchronized String consume() {
@@ -42,6 +52,11 @@ public class Buffer {
     
     static int count = 1;
     synchronized static void print(String string) {
+        if(count>mSize){
+            System.out.print("Reached Buffer Limit");
+            return;
+        }
+            
         System.out.print(count++ + " ");
         System.out.println(string);
     }
@@ -49,4 +64,6 @@ public class Buffer {
     public String getBuffer(){
         return this.buffer;
     }
+    
+    
 }

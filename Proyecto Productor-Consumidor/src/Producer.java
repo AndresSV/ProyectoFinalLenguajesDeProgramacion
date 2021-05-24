@@ -16,6 +16,18 @@ public class Producer extends Thread {
         this.cantidad = cantidad;
         this.valMin = valMin;
         this.valMax =  valMax;
+        if(wait_MS < 0){
+            wait_MS=0;
+        }
+        if(wait_MS > 10000){
+            wait_MS=10000;
+        }
+        if(wait_MS < 0){
+            wait_MS=0;
+        }
+        if(wait_MS > 10000){
+            wait_MS=10000;
+        }
         this.wait_MS = wait_MS;
         this.operadores = operadores.split("");
         this.produced=produced;
@@ -39,7 +51,7 @@ public class Producer extends Thread {
             char operador = product.charAt(1);
             int valor1 = Character.getNumericValue(product.charAt(3));
             int valor2 = Character.getNumericValue(product.charAt(5));
-            Object[]rowData={operador,valor1,valor2,this.buffer.getBuffer()};
+            Object[]rowData={operador,valor1,valor2,this.buffer.count};
             this.produced.addRow(rowData);
             this.buffer.produce(product);
         }   

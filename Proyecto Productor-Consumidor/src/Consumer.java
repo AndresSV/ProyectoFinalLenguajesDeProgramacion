@@ -11,6 +11,18 @@ public class Consumer extends Thread {
 
     Consumer(Buffer buffer, int ms, DefaultTableModel consumed) {
         this.buffer = buffer;
+        if(ms < 0){
+            ms=0;
+        }
+        if(ms > 10000){
+            ms=10000;
+        }
+        if(ms < 0){
+            ms=0;
+        }
+        if(ms > 10000){
+            ms=10000;
+        }
         this.waitMillis = ms;
         this.consumed = consumed;
     }

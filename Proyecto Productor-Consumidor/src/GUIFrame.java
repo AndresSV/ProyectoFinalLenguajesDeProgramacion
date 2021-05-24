@@ -339,7 +339,7 @@ public class GUIFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         if (!isRunning) {
                 try{
-                Buffer buffer = new Buffer();
+                Buffer buffer = new Buffer(Integer.parseInt(jTextField3.getText()));
 
                 cantProducer = (int) nProductores.getValue();
                 cantConsumer = (int) nConsumidores.getValue();
