@@ -1,8 +1,7 @@
-
-
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
 
 public class Producer extends Thread {
     Buffer buffer;
@@ -10,6 +9,7 @@ public class Producer extends Thread {
     int cantidad, valMin, valMax;
     String[] operadores;
     private volatile boolean isRunning = true;
+    DefaultTableModel produced;
     
     Producer(Buffer buffer, int cantidad, int valMin, int valMax, int wait_MS, String operadores) {
         this.buffer = buffer;
@@ -32,35 +32,26 @@ public class Producer extends Thread {
     @Override
     public void run() {
         System.out.println("Running Producer...");
-        String products = "+-*/";
         Random r = new Random(System.currentTimeMillis());
         
         while(isRunning) {
             String product = scheme_operation();
             this.buffer.produce(product);
+        }   
+        try {
+            Thread.sleep(this.wait_MS);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Producer.class.getName()).log(Level.SEVERE, null, ex);
+            log("Stopped Thread");
         }
-        
-        for(int i=valMin; i<=valMax; i++){
-            products += i;
-        }
-        
-        System.out.println(products);
-            
-         try {
-                Thread.sleep(this.wait_MS);
-         } catch (InterruptedException ex) {
-                Logger.getLogger(Producer.class.getName()).log(Level.SEVERE, null, ex);
-                log("Stopped Thread");
-            }
-        }
-    
-    public void terminate(){
-            log("Stopping producer...");
-            isRunning = false;
-        }
-    
-        private void log (Object obj){
-        System.out.println(obj);
     }
     
+    public void terminate(){
+        log("Stopping producer...");
+        isRunning = false;
+    }
+    
+    private void log (Object obj){
+        System.out.println(obj);
+    }
 }

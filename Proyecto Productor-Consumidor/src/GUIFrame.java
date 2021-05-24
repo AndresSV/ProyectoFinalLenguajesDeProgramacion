@@ -1,6 +1,7 @@
 
 import javax.swing.JOptionPane;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.table.DefaultTableModel;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -360,7 +361,7 @@ public class GUIFrame extends javax.swing.JFrame {
                 Producer producer = new Producer(buffer, cantProducer, valMin, valMax,wait_MS,operadores);
                 producer.start();
 
-                Consumer consumer = new Consumer(buffer, cantConsumer);
+                Consumer consumer = new Consumer(buffer, cantConsumer,(DefaultTableModel) jTable2.getModel());
                 consumer.start();
 
                 validarValores(valMin, valMax);
